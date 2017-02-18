@@ -1,0 +1,10 @@
+MacBookPro:docker rdoraiswamy$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+ea4524b86ab8        quickstart_web      "python app.py"          7 minutes ago       Up 7 minutes        0.0.0.0:5000->5000/tcp   quickstart_web_1
+d9aa85cef82d        redis:alpine        "docker-entrypoint..."   7 minutes ago       Up 7 minutes        6379/tcp                 quickstart_redis_1
+733b9d4e541a        django_web          "python manage.py ..."   11 minutes ago      Up 10 minutes       0.0.0.0:8100->8100/tcp   django_web_1
+f7566b08680b        postgres            "docker-entrypoint..."   11 minutes ago      Up 11 minutes       5432/tcp                 django_db_1
+9ea7801dbaff        wordpress:latest    "docker-entrypoint..."   11 minutes ago      Up 11 minutes       0.0.0.0:8000->80/tcp     wordpress_wordpress_1
+af3ee23c180b        mysql:5.7           "docker-entrypoint..."   11 minutes ago      Up 11 minutes       3306/tcp                 wordpress_db_1
+9875912935be        rails_web           "bundle exec rails..."   11 minutes ago      Up 9 minutes        0.0.0.0:3000->3000/tcp   rails_web_1
+9402ea488a2a        postgres            "docker-entrypoint..."   11 minutes ago      Up 11 minutes       5432/tcp                 rails_db_1

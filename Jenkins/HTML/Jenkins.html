@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:fb="http://ogp.me/ns/fb#" xmlns:addthis="http://www.addthis.com/help/api-spec"  prefix="og: http://ogp.me/ns#">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>docker-compose and Jenkins | - Softwaretester -</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://softwaretester.info/xmlrpc.php">
+
+
+<!-- This site is optimized with the Yoast SEO plugin v3.1.2 - https://yoast.com/wordpress/plugins/seo/ -->
+<meta name="keywords" content="softwaretester, qa, software tester, istqb, osstmm, test automation, test design, performance test"/>
+<link rel="canonical" href="http://softwaretester.info/docker-compose-and-jenkins/" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="docker-compose and Jenkins | - Softwaretester -" />
+<meta property="og:description" content="In this tutorial i show an example, how to install Jenkins (version 2.0) via docker-compose (and docker-machine). Preconditions docker-machine installed docker-compose installed Preparation [crayon-58a78befc5656892612869/] [crayon-58a78befc5668986635018/] Build and run [crayon-58a78befc566b343729195/] Run Browser" />
+<meta property="og:url" content="http://softwaretester.info/docker-compose-and-jenkins/" />
+<meta property="og:site_name" content="- Softwaretester -" />
+<meta property="article:tag" content="Docker" />
+<meta property="article:tag" content="Jenkins" />
+<meta property="article:tag" content="VirtualBox" />
+<meta property="article:section" content="Build Server" />
+<meta property="article:published_time" content="2016-04-25T18:46:25+01:00" />
+<meta property="article:modified_time" content="2016-04-25T18:47:07+01:00" />
+<meta property="og:updated_time" content="2016-04-25T18:47:07+01:00" />
+<meta property="og:image" content="http://softwaretester.info/wp-content/uploads/2016/04/docker-jenkins.jpg" />
+<!-- / Yoast SEO plugin. -->
+
+<link rel="alternate" type="application/rss+xml" title="- Softwaretester - &raquo; Feed" href="http://softwaretester.info/feed/" />
+<link rel="alternate" type="application/rss+xml" title="- Softwaretester - &raquo; Comments Feed" href="http://softwaretester.info/comments/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"http:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/softwaretester.info\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.2.12"}};
+			!function(a,b,c){function d(a){var c=b.createElement("canvas"),d=c.getContext&&c.getContext("2d");return d&&d.fillText?(d.textBaseline="top",d.font="600 32px Arial","flag"===a?(d.fillText(String.fromCharCode(55356,56812,55356,56807),0,0),c.toDataURL().length>3e3):(d.fillText(String.fromCharCode(55357,56835),0,0),0!==d.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='crayon-css'  href='http://softwaretester.info/wp-content/plugins/crayon-syntax-highlighter/css/min/crayon.min.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-theme-inlellij-idea-css'  href='http://softwaretester.info/wp-content/plugins/crayon-syntax-highlighter/themes/inlellij-idea/inlellij-idea.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='crayon-font-monaco-css'  href='http://softwaretester.info/wp-content/plugins/crayon-syntax-highlighter/fonts/monaco.css?ver=_2.7.2_beta' type='text/css' media='all' />
+<link rel='stylesheet' id='quadra-pt-serif-css'  href='https://fonts.googleapis.com/css?family=PT+Serif%3A400%2C700%2C400italic%2C700italic&#038;subset=latin%2Clatin-ext&#038;ver=4.2.12' type='text/css' media='all' />
+<link rel='stylesheet' id='hexa-style-css'  href='http://softwaretester.info/wp-content/themes/quadra/style.css?ver=4.2.12' type='text/css' media='all' />
+<link rel='stylesheet' id='hexa-source-sans-pro-css'  href='http://fonts.googleapis.com/css?family=Source+Sans+Pro%3A300%2C400%2C700%2C300italic%2C400italic%2C700italic&#038;ver=4.2.12' type='text/css' media='all' />
+<link rel='stylesheet' id='genericons-css'  href='http://softwaretester.info/wp-content/themes/hexa/genericons/genericons.css?ver=3.0.3' type='text/css' media='all' />
+<script type='text/javascript' src='http://softwaretester.info/wp-includes/js/jquery/jquery.js?ver=1.11.2'></script>
+<script type='text/javascript' src='http://softwaretester.info/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.2.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"http:\/\/softwaretester.info\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"Press %s to Copy, %s to Paste","minimize":"Click To Expand Code"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='http://softwaretester.info/wp-content/plugins/crayon-syntax-highlighter/js/min/crayon.min.js?ver=_2.7.2_beta'></script>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://softwaretester.info/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://softwaretester.info/wp-includes/wlwmanifest.xml" /> 
+<meta name="generator" content="WordPress 4.2.12" />
+<link rel='shortlink' href='http://softwaretester.info/?p=691' />
+			<style type="text/css" id="hexa-custom-background-css">
+							body.custom-background,
+				.custom-background .wp-caption {
+					background-color: #f7f7f7				}
+				.custom-background img.alignleft,
+				.wp-caption.alignleft,
+				img.alignright,
+				.wp-caption.alignright,
+				.author-archives-img,
+				.comment-author .avatar-wrapper {
+					border-top-color: #f7f7f7;
+					border-bottom-color: #f7f7f7;
+				}
+								</style>
+	</head>
+
+<body class="single single-post postid-691 single-format-standard">
+<div id="page" class="hfeed site">
+			<div id="menu-toggle-nav" class="panel">
+		<nav id="site-navigation" class="main-navigation" role="navigation">
+			<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
+
+			<div class="menu"><ul><li ><a href="http://softwaretester.info/">Home</a></li><li class="page_item page-item-163"><a href="http://softwaretester.info/downloads/">Downloads</a></li><li class="page_item page-item-98"><a href="http://softwaretester.info/external-links/">External Links</a></li><li class="page_item page-item-8"><a href="http://softwaretester.info/site-notice/">Site Notice</a></li></ul></div>
+		</nav><!-- #site-navigation -->
+	</div>
+			<div id="sidebar-toggle-nav" class="panel">
+	<div class="widget-areas">
+					<div class="widget-area">
+				<aside id="categories-4" class="widget widget_categories"><h1 class="widget-title">Categories</h1>		<ul>
+	<li class="cat-item cat-item-2"><a href="http://softwaretester.info/category/build-server/" >Build Server</a>
+</li>
+	<li class="cat-item cat-item-35"><a href="http://softwaretester.info/category/command-line/" >Command-line</a>
+</li>
+	<li class="cat-item cat-item-3"><a href="http://softwaretester.info/category/mac-osx-hints/" >Mac OS X Hints</a>
+</li>
+	<li class="cat-item cat-item-10"><a href="http://softwaretester.info/category/security/" >Security</a>
+</li>
+	<li class="cat-item cat-item-5"><a href="http://softwaretester.info/category/test-automation/" >Test Automation</a>
+</li>
+	<li class="cat-item cat-item-4"><a href="http://softwaretester.info/category/test-recipes/" >Test Recipes</a>
+</li>
+		</ul>
+</aside>			</div>
+							<div class="widget-area">
+				<aside id="archives-5" class="widget widget_archive"><h1 class="widget-title">Archives</h1>		<ul>
+	<li><a href='http://softwaretester.info/2016/12/'>December 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/11/'>November 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/10/'>October 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/09/'>September 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/07/'>July 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/06/'>June 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/05/'>May 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/04/'>April 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/03/'>March 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/02/'>February 2016</a></li>
+	<li><a href='http://softwaretester.info/2016/01/'>January 2016</a></li>
+	<li><a href='http://softwaretester.info/2015/12/'>December 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/11/'>November 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/10/'>October 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/09/'>September 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/08/'>August 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/07/'>July 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/06/'>June 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/05/'>May 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/04/'>April 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/03/'>March 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/02/'>February 2015</a></li>
+	<li><a href='http://softwaretester.info/2015/01/'>January 2015</a></li>
+	<li><a href='http://softwaretester.info/2014/12/'>December 2014</a></li>
+		</ul>
+</aside>			</div>
+							<div class="widget-area">
+						<aside id="recent-posts-4" class="widget widget_recent_entries">		<h1 class="widget-title">Recent Posts</h1>		<ul>
+					<li>
+				<a href="http://softwaretester.info/create-flask-projects-via-makefile/">Create Flask projects via Makefile</a>
+						</li>
+					<li>
+				<a href="http://softwaretester.info/simple-doctests-with-pycharm-ce/">Simple Doctests with PyCharm CE</a>
+						</li>
+					<li>
+				<a href="http://softwaretester.info/install-pappy-proxy-on-centos7/">Install Pappy Proxy on CentOS7</a>
+						</li>
+					<li>
+				<a href="http://softwaretester.info/pycharm-term-environment-variable-not-set/">PyCharm &#8211; TERM environment variable not set</a>
+						</li>
+					<li>
+				<a href="http://softwaretester.info/install-w3af-on-debian/">Install w3af on Debian (Jessie)</a>
+						</li>
+				</ul>
+		</aside>			</div>
+			</div>
+</div>			<div id="search-toggle-nav" class="panel">
+		<div class="search-wrapper">
+			<form role="search" method="get" class="search-form" action="http://softwaretester.info/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s">
+	</label>
+	<input type="submit" class="search-submit" value="Search">
+</form>
+		</div>
+	</div>
+	<header id="masthead" class="site-header" role="banner">
+		<div class="site-header-wrapper">
+			<div class="site-branding">
+				<h1 class="site-title"><a href="http://softwaretester.info/" rel="home">&#8211; Softwaretester &#8211;</a></h1>
+				<h2 class="site-description">knowledge is power</h2>
+			</div>
+			<div class="toggles">
+			<div id="menu-toggle" class="toggle" title="Menu">
+				<span class="screen-reader-text">Menu</span>
+			</div><!-- #menu-toggle -->
+							<div id="sidebar-toggle" class="toggle" title="Widgets">
+					<span class="screen-reader-text">Widgets</span>
+				</div><!-- #sidebar-toggle -->
+									<div id="search-toggle" class="toggle" title="Search">
+				<span class="screen-reader-text">Search</span>
+			</div><!-- #search-toggle -->
+		</div><!-- .toggles -->
+		</div>
+	</header><!-- #masthead -->
+	<div id="content" class="site-content">
+
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		
+			
+<article id="post-691" class="post-691 post type-post status-publish format-standard hentry category-build-server category-command-line category-test-automation tag-docker tag-jenkins tag-virtualbox">
+	<header class="entry-header">
+					<span class="entry-format"></span>
+				<h1 class="entry-title">docker-compose and Jenkins</h1>	</header><!-- .entry-header -->
+
+	<div class="entry-content">
+		<!-- AddThis Sharing Buttons above --><p>In this tutorial i show an example, how to install Jenkins (<em>version 2.0</em>) via docker-compose (<em>and docker-machine</em>).</p>
+<p><strong>Preconditions</strong></p>
+<ul>
+<li><a href="https://docs.docker.com/machine/" target="_blank">docker-machine</a> installed</li>
+<li><a href="https://docs.docker.com/compose/" target="_blank">docker-compose</a> installed</li>
+</ul>
+<p><strong>Preparation</strong></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-58a78befc5656892612869" class="crayon-syntax crayon-theme-inlellij-idea crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-toolbar" data-settings=" mouseover overlay hide delay" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Shell</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+# create example directories
+$ mkdir -p ~/Projects/Example/Jenkins_HOME &amp;&amp; cd ~/Projects/Example
+
+# create new and edit compose files
+$ vim docker-compose.yml</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-58a78befc5656892612869-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5656892612869-2">2</div><div class="crayon-num" data-line="crayon-58a78befc5656892612869-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5656892612869-4">4</div><div class="crayon-num" data-line="crayon-58a78befc5656892612869-5">5</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-58a78befc5656892612869-1"><span class="crayon-c"># create example directories</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5656892612869-2"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-r">mkdir</span><span class="crayon-h"> </span><span class="crayon-o">-</span><span class="crayon-v">p</span><span class="crayon-h"> </span><span class="crayon-o">~</span><span class="crayon-o">/</span><span class="crayon-v">Projects</span><span class="crayon-o">/</span><span class="crayon-v">Example</span><span class="crayon-o">/</span><span class="crayon-v">Jenkins_HOME</span><span class="crayon-h"> </span><span class="crayon-o">&amp;&amp;</span><span class="crayon-h"> </span><span class="crayon-r">cd</span><span class="crayon-h"> </span><span class="crayon-o">~</span><span class="crayon-o">/</span><span class="crayon-v">Projects</span><span class="crayon-o">/</span><span class="crayon-v">Example</span></div><div class="crayon-line" id="crayon-58a78befc5656892612869-3">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5656892612869-4"><span class="crayon-c"># create new and edit compose files</span></div><div class="crayon-line" id="crayon-58a78befc5656892612869-5"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-r">vim</span><span class="crayon-h"> </span><span class="crayon-v">docker</span><span class="crayon-o">-</span><span class="crayon-v">compose</span><span class="crayon-e">.yml</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0012 seconds] -->
+<p></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-58a78befc5668986635018" class="crayon-syntax crayon-theme-inlellij-idea crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-toolbar" data-settings=" mouseover overlay hide delay" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title">docker-compose.yml</span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">YAML</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+---
+version: '2'
+services:
+  jenkins:
+    image: jenkins:2.0
+    container_name: jenkins
+    restart: always
+    ports:
+      - 8080:8080
+    volumes:
+      - ./FOR_JENKINS:/var/jenkins_home</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-58a78befc5668986635018-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5668986635018-2">2</div><div class="crayon-num" data-line="crayon-58a78befc5668986635018-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5668986635018-4">4</div><div class="crayon-num" data-line="crayon-58a78befc5668986635018-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5668986635018-6">6</div><div class="crayon-num" data-line="crayon-58a78befc5668986635018-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5668986635018-8">8</div><div class="crayon-num" data-line="crayon-58a78befc5668986635018-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc5668986635018-10">10</div><div class="crayon-num" data-line="crayon-58a78befc5668986635018-11">11</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-58a78befc5668986635018-1"><span class="crayon-o">---</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5668986635018-2"><span class="crayon-s ">version</span><span class="">: '2'</span></div><div class="crayon-line" id="crayon-58a78befc5668986635018-3"><span class="crayon-s ">services</span><span class="">:</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5668986635018-4"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-s ">jenkins</span><span class="">:</span></div><div class="crayon-line" id="crayon-58a78befc5668986635018-5"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s ">image</span><span class="">: jenkins</span><span class="">:2.0</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5668986635018-6"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s ">container_name</span><span class="">: jenkins</span></div><div class="crayon-line" id="crayon-58a78befc5668986635018-7"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s ">restart</span><span class="">: always</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5668986635018-8"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s ">ports</span><span class="">:</span></div><div class="crayon-line" id="crayon-58a78befc5668986635018-9"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s ">- 8080</span><span class="">:8080</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc5668986635018-10"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-s ">volumes</span><span class="">:</span></div><div class="crayon-line" id="crayon-58a78befc5668986635018-11"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>-<span class="crayon-h"> </span><span class="crayon-o">.</span>/<span class="crayon-s ">FOR_JENKINS</span><span class="">:/var/jenkins_home</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0004 seconds] -->
+<p><strong>Build and run</strong></p><!-- Crayon Syntax Highlighter v_2.7.2_beta -->
+
+		<div id="crayon-58a78befc566b343729195" class="crayon-syntax crayon-theme-inlellij-idea crayon-font-monaco crayon-os-pc print-yes notranslate" data-settings=" minimize scroll-mouseover" style=" margin-top: 12px; margin-bottom: 12px; font-size: 12px !important; line-height: 15px !important;">
+		
+			<div class="crayon-toolbar" data-settings=" mouseover overlay hide delay" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><span class="crayon-title"></span>
+			<div class="crayon-tools" style="font-size: 12px !important;height: 18px !important; line-height: 18px !important;"><div class="crayon-button crayon-nums-button" title="Toggle Line Numbers"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-plain-button" title="Toggle Plain Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-wrap-button" title="Toggle Line Wrap"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-expand-button" title="Expand Code"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-copy-button" title="Copy"><div class="crayon-button-icon"></div></div><div class="crayon-button crayon-popup-button" title="Open Code In New Window"><div class="crayon-button-icon"></div></div><span class="crayon-language">Shell</span></div></div>
+			<div class="crayon-info" style="min-height: 16.8px !important; line-height: 16.8px !important;"></div>
+			<div class="crayon-plain-wrap"><textarea wrap="soft" class="crayon-plain print-no" data-settings="dblclick" readonly style="-moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4; font-size: 12px !important; line-height: 15px !important;">
+# create new VM
+$ docker-machine create -d virtualbox --virtualbox-memory "2048" example-vm
+
+# point shell
+$ eval $(docker-machine env example-vm)
+
+# show current state
+$ docker-machine ls
+...
+NAME         ACTIVE   DRIVER       STATE     URL                         SWARM   DOCKER    ERRORS
+example-vm   *        virtualbox   Running   tcp://192.168.99.100:2376           v1.11.0 
+
+# run docker-compose
+$ docker-compose up -d
+
+# show state
+$ docker-compose ps
+...
+Name                Command               State                 Ports               
+------------------------------------------------------------------------------------
+jenkins   /bin/tini -- /usr/local/bi ...   Up      50000/tcp, 0.0.0.0:8080-&gt;8080/tcp
+
+# get administrator password
+$ docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword</textarea></div>
+			<div class="crayon-main" style="">
+				<table class="crayon-table">
+					<tr class="crayon-row">
+				<td class="crayon-nums " data-settings="show">
+					<div class="crayon-nums-content" style="font-size: 12px !important; line-height: 15px !important;"><div class="crayon-num" data-line="crayon-58a78befc566b343729195-1">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-2">2</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-3">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-4">4</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-5">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-6">6</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-7">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-8">8</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-9">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-10">10</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-11">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-12">12</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-13">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-14">14</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-15">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-16">16</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-17">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-18">18</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-19">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-20">20</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-21">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-22">22</div><div class="crayon-num" data-line="crayon-58a78befc566b343729195-23">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-58a78befc566b343729195-24">24</div></div>
+				</td>
+						<td class="crayon-code"><div class="crayon-pre" style="font-size: 12px !important; line-height: 15px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-58a78befc566b343729195-1"><span class="crayon-c"># create new VM</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-2"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-v">docker</span><span class="crayon-o">-</span><span class="crayon-e">machine </span><span class="crayon-v">create</span><span class="crayon-h"> </span><span class="crayon-o">-</span><span class="crayon-i">d</span><span class="crayon-h"> </span><span class="crayon-v">virtualbox</span><span class="crayon-h"> </span><span class="crayon-o">--</span><span class="crayon-v">virtualbox</span><span class="crayon-o">-</span><span class="crayon-i">memory</span><span class="crayon-h"> </span><span class="crayon-s">"2048"</span><span class="crayon-h"> </span><span class="crayon-v">example</span><span class="crayon-o">-</span><span class="crayon-v">vm</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-3">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-4"><span class="crayon-c"># point shell</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-5"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-i">eval</span><span class="crayon-h"> </span><span class="crayon-sy">$</span><span class="crayon-sy">(</span><span class="crayon-v">docker</span><span class="crayon-o">-</span><span class="crayon-e">machine </span><span class="crayon-r">env</span><span class="crayon-h"> </span><span class="crayon-v">example</span><span class="crayon-o">-</span><span class="crayon-v">vm</span><span class="crayon-sy">)</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-6">&nbsp;</div><div class="crayon-line" id="crayon-58a78befc566b343729195-7"><span class="crayon-c"># show current state</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-8"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-v">docker</span><span class="crayon-o">-</span><span class="crayon-e">machine </span><span class="crayon-r">ls</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-9"><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-10"><span class="crayon-e">NAME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-e">ACTIVE&nbsp;&nbsp; </span><span class="crayon-e">DRIVER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-e">STATE&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-e">URL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-e">SWARM&nbsp;&nbsp; </span><span class="crayon-e">DOCKER&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">ERRORS</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-11"><span class="crayon-v">example</span><span class="crayon-o">-</span><span class="crayon-v">vm</span><span class="crayon-h">&nbsp;&nbsp; </span><span class="crayon-o">*</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">virtualbox&nbsp;&nbsp; </span><span class="crayon-e">Running&nbsp;&nbsp; </span><span class="crayon-v">tcp</span><span class="crayon-o">:</span><span class="crayon-o">/</span><span class="crayon-o">/</span><span class="crayon-cn">192.168.99.100</span><span class="crayon-o">:</span><span class="crayon-cn">2376</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-v">v1</span><span class="crayon-sy">.</span><span class="crayon-cn">11.0</span><span class="crayon-h"> </span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-12">&nbsp;</div><div class="crayon-line" id="crayon-58a78befc566b343729195-13"><span class="crayon-c"># run docker-compose</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-14"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-v">docker</span><span class="crayon-o">-</span><span class="crayon-e">compose </span><span class="crayon-v">up</span><span class="crayon-h"> </span><span class="crayon-o">-</span><span class="crayon-v">d</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-15">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-16"><span class="crayon-c"># show state</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-17"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-v">docker</span><span class="crayon-o">-</span><span class="crayon-e">compose </span><span class="crayon-r">ps</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-18"><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-19"><span class="crayon-e">Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-r">Command</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-e">State&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-v">Ports</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-20"><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span><span class="crayon-o">--</span></div><div class="crayon-line" id="crayon-58a78befc566b343729195-21"><span class="crayon-v">jenkins</span><span class="crayon-h">&nbsp;&nbsp; </span><span class="crayon-o">/</span><span class="crayon-v">bin</span><span class="crayon-o">/</span><span class="crayon-v">tini</span><span class="crayon-h"> </span><span class="crayon-o">--</span><span class="crayon-h"> </span><span class="crayon-o">/</span><span class="crayon-v">usr</span><span class="crayon-o">/</span><span class="crayon-v">local</span><span class="crayon-o">/</span><span class="crayon-i">bi</span><span class="crayon-h"> </span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-h">&nbsp;&nbsp; </span><span class="crayon-i">Up</span><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-cn">50000</span><span class="crayon-o">/</span><span class="crayon-v">tcp</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-cn">0.0.0.0</span><span class="crayon-o">:</span><span class="crayon-cn">8080</span><span class="crayon-o">-&gt;</span><span class="crayon-cn">8080</span><span class="crayon-o">/</span><span class="crayon-v">tcp</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-22">&nbsp;</div><div class="crayon-line" id="crayon-58a78befc566b343729195-23"><span class="crayon-c"># get administrator password</span></div><div class="crayon-line crayon-striped-line" id="crayon-58a78befc566b343729195-24"><span class="crayon-sy">$</span><span class="crayon-h"> </span><span class="crayon-e">docker </span><span class="crayon-e">exec </span><span class="crayon-e">jenkins </span><span class="crayon-r">cat</span><span class="crayon-h"> </span><span class="crayon-o">/</span><span class="crayon-t">var</span><span class="crayon-o">/</span><span class="crayon-v">jenkins_home</span><span class="crayon-o">/</span><span class="crayon-v">secrets</span><span class="crayon-o">/</span><span class="crayon-v">initialAdminPassword</span></div></div></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+<!-- [Format Time: 0.0030 seconds] -->
+<p><strong>Run Browser</strong></p>
+<p><img class="alignnone size-full wp-image-695" src="http://softwaretester.info/wp-content/uploads/2016/04/docker-jenkins.jpg" alt="docker jenkins container" width="600" height="471" /></p>
+<!-- AddThis Sharing Buttons below -->
+                <div class="addthis_toolbox addthis_default_style addthis_32x32_style" addthis:url='http://softwaretester.info/docker-compose-and-jenkins/' addthis:title='docker-compose and Jenkins' >
+                    <a class="addthis_button_preferred_1"></a>
+                    <a class="addthis_button_preferred_2"></a>
+                    <a class="addthis_button_preferred_3"></a>
+                    <a class="addthis_button_preferred_4"></a>
+                    <a class="addthis_button_compact"></a>
+                    <a class="addthis_counter addthis_bubble_style"></a>
+                </div>			</div><!-- .entry-content -->
+
+	<footer class="entry-meta">
+		<span class="post-date"><a href="http://softwaretester.info/docker-compose-and-jenkins/" title="6:46 PM" rel="bookmark"><time class="entry-date" datetime="2016-04-25T18:46:25+00:00">2016-04-25</time></a></span><span class="byline"><span class="author vcard"><a class="url fn n" href="http://softwaretester.info/author/lupin3000/" title="View all posts by Lupin3000" rel="author">Lupin3000</a></span></span>				<span class="tags-links">
+			<a href="http://softwaretester.info/tag/docker/" rel="tag">Docker</a>, <a href="http://softwaretester.info/tag/jenkins/" rel="tag">Jenkins</a>, <a href="http://softwaretester.info/tag/virtualbox/" rel="tag">VirtualBox</a>		</span>
+					</footer><!-- .entry-meta -->
+</article><!-- #post-## -->
+
+				<nav class="navigation post-navigation" role="navigation">
+		<h1 class="screen-reader-text">Post navigation</h1>
+		<div class="nav-links">
+			<div class="nav-previous"><a href="http://softwaretester.info/vagrant-and-yaml/" rel="prev"><span class="meta-nav screen-reader-text">&larr;</span></a></div><div class="nav-next"><a href="http://softwaretester.info/monitor-running-docker-containers-cadvisor/" rel="next"><span class="meta-nav screen-reader-text">&rarr;</span></a></div>		</div><!-- .nav-links -->
+	</nav><!-- .navigation -->
+	
+			
+		
+		</main><!-- #main -->
+	</div><!-- #primary -->
+
+
+	</div><!-- #content -->
+	<footer id="colophon" class="site-footer" role="contentinfo">
+		<div class="site-info">
+						<a href="http://wordpress.org/" rel="generator">Proudly powered by WordPress</a>
+			<span class="sep"> | </span>
+			Theme: Quadra by <a href="https://wordpress.com/themes/quadra" rel="designer">WordPress.com</a>.		</div><!-- .site-info -->
+	</footer><!-- #colophon -->
+</div><!-- #page -->
+<script data-cfasync="false" type="text/javascript">
+var addthis_config = {"data_track_clickback":true,"ui_atversion":300,"ignore_server_config":true};
+var addthis_share = {};
+</script>
+                <!-- AddThis Settings Begin -->
+                <script data-cfasync="false" type="text/javascript">
+                    var addthis_product = "wpp-5.3.4";
+                    var wp_product_version = "wpp-5.3.4";
+                    var wp_blog_version = "4.2.12";
+                    var addthis_plugin_info = {"info_status":"enabled","cms_name":"WordPress","plugin_name":"Share Buttons by AddThis","plugin_version":"5.3.4","anonymous_profile_id":"wp-7a03086db58aa24b3a2622a1465ce4fb","plugin_mode":"WordPress","select_prefs":{"addthis_per_post_enabled":true,"addthis_above_enabled":false,"addthis_below_enabled":true,"addthis_sidebar_enabled":false,"addthis_mobile_toolbar_enabled":false,"addthis_above_showon_home":true,"addthis_above_showon_posts":true,"addthis_above_showon_pages":true,"addthis_above_showon_archives":true,"addthis_above_showon_categories":true,"addthis_above_showon_excerpts":true,"addthis_below_showon_home":false,"addthis_below_showon_posts":true,"addthis_below_showon_pages":false,"addthis_below_showon_archives":false,"addthis_below_showon_categories":true,"addthis_below_showon_excerpts":false,"addthis_sidebar_showon_home":true,"addthis_sidebar_showon_posts":true,"addthis_sidebar_showon_pages":true,"addthis_sidebar_showon_archives":true,"addthis_sidebar_showon_categories":true,"addthis_mobile_toolbar_showon_home":true,"addthis_mobile_toolbar_showon_posts":true,"addthis_mobile_toolbar_showon_pages":true,"addthis_mobile_toolbar_showon_archives":true,"addthis_mobile_toolbar_showon_categories":true,"sharing_enabled_on_post_via_metabox":true},"page_info":{"template":"posts","post_type":""}};
+                    if (typeof(addthis_config) == "undefined") {
+                        var addthis_config = {"data_track_clickback":true,"ui_atversion":300,"ignore_server_config":true};
+                    }
+                    if (typeof(addthis_share) == "undefined") {
+                        var addthis_share = {};
+                    }
+                    if (typeof(addthis_layers) == "undefined") {
+                        var addthis_layers = {};
+                    }
+                </script>
+                <script
+                    data-cfasync="false"
+                    type="text/javascript"
+                    src="//s7.addthis.com/js/300/addthis_widget.js#pubid=wp-7a03086db58aa24b3a2622a1465ce4fb "
+                    async="async"
+                >
+                </script>
+                <script data-cfasync="false" type="text/javascript">
+                    (function() {
+                        var at_interval = setInterval(function () {
+                            if(window.addthis) {
+                                clearInterval(at_interval);
+                                addthis.layers(addthis_layers);
+                            }
+                        },1000)
+                    }());
+                </script>
+                <link rel='stylesheet' id='addthis_output-css'  href='http://softwaretester.info/wp-content/plugins/addthis/css/output.css?ver=4.2.12' type='text/css' media='all' />
+<script type='text/javascript' src='http://softwaretester.info/wp-content/themes/hexa/js/menus.js?ver=20120206'></script>
+<script type='text/javascript' src='http://softwaretester.info/wp-content/themes/hexa/js/skip-link-focus-fix.js?ver=20130115'></script>
+<!--wp_footer-->
+</body>
+</html>

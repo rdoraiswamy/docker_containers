@@ -1,0 +1,10 @@
+#!/bin/bash +x
+PIDFILE="tmp/pids/server.pid"
+if [ -f $PIDFILE ]
+then
+	docker ps
+  docker-compose down
+else
+  echo "Are you sure\? I don't think Rails on Docker is up"
+	docker ps
+fi

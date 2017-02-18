@@ -1,0 +1,7 @@
+#!/bin/bash +x
+PIDFILE="tmp/pids/server.pid"
+if [ -f $PIDFILE ]
+then
+   rm -f $PIDFILE
+fi
+docker-compose up -d
