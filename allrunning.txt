@@ -1,4 +1,4 @@
-MacBookPro:docker rdoraiswamy$ docker ps -a
+MacBookPro:docker $ docker ps -a
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
 ea4524b86ab8        quickstart_web      "python app.py"          7 minutes ago       Up 7 minutes        0.0.0.0:5000->5000/tcp   quickstart_web_1
 d9aa85cef82d        redis:alpine        "docker-entrypoint..."   7 minutes ago       Up 7 minutes        6379/tcp                 quickstart_redis_1
